@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 class MediaModel {
+  final int collectionId;
   final String kind;
   final String artistName;
   final String trackName;
@@ -17,6 +18,7 @@ class MediaModel {
   final String primaryGenreName;
 
   MediaModel({
+    this.collectionId = 0,
     this.kind = '',
     this.artistName = '',
     this.trackName = '',
@@ -33,9 +35,11 @@ class MediaModel {
     this.primaryGenreName = '',
   });
 
-  factory MediaModel.fromRawJson(String str) => MediaModel.fromJson(json.decode(str));
+  factory MediaModel.fromRawJson(String str) =>
+      MediaModel.fromJson(json.decode(str));
 
   factory MediaModel.fromJson(Map<String, dynamic> json) => MediaModel(
+        collectionId: json["collectionId"] ?? 0,
         kind: json["kind"] ?? '',
         artistName: json["artistName"] ?? '',
         trackName: json["trackName"] ?? '',

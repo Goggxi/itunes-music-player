@@ -1,4 +1,4 @@
-# itunes_music_player
+# iTunes Music Player
 
 ## Basic Setup
 ```bash
