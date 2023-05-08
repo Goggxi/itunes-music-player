@@ -1,0 +1,71 @@
+name: itunes_music_player
+description: A project for playing song.
+
+publish_to: 'none' 
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.19.6 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # C
+  cupertino_icons: ^1.0.2
+  # G
+  get_it: ^7.5.0
+  google_fonts: ^4.0.4
+  # H
+  http: ^0.13.6
+  # I
+  injectable: ^2.1.1
+  # P
+  provider: ^6.0.5
+  # S
+  shared_preferences: ^2.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # B
+  build_runner: ^2.3.3
+  # F
+  flutter_lints: ^2.0.0
+  # I
+  injectable_generator: ^2.1.5
+
+flutter:
+  uses-material-design: true
+
+  
+  
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
