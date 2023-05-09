@@ -9,6 +9,14 @@ class ConfigProvider with ChangeNotifier {
   ConfigProvider(this._sharedPreferences);
 
   static const String _themeModeKey = 'theme_mode';
+  static const String _languageCodeKey = 'language_code';
+
+  Future<void> init() async {
+    await Future.wait([
+      loadThemeMode(),
+      loadLanguageCode(),
+    ]);
+  }
 
   ThemeMode _themeMode = ThemeMode.system;
   ThemeMode get themeMode => _themeMode;
@@ -18,11 +26,6 @@ class ConfigProvider with ChangeNotifier {
   }
 
   bool get isDarkMode => themeMode == ThemeMode.dark;
-
-  void saveThemeMode(ThemeMode value) {
-    themeMode = value;
-    _sharedPreferences.setInt(_themeModeKey, value.index);
-  }
 
   Future<void> loadThemeMode() async {
     final int? themeModeIndex = _sharedPreferences.getInt(_themeModeKey);
@@ -35,4 +38,25 @@ class ConfigProvider with ChangeNotifier {
     themeMode = isDarkMode ? ThemeMode.light : ThemeMode.dark;
     _sharedPreferences.setInt(_themeModeKey, themeMode.index);
   }
+
+  String _languageCode = 'id';
+  String get languageCode => _languageCode;
+  set languageCode(String value) {
+    _languageCode = value;
+    notifyListeners();
+  }
+
+  Future<void> loadLanguageCode() async {
+    final String? languageCode = _sharedPreferences.getString(_languageCodeKey);
+    if (languageCode != null) {
+      this.languageCode = languageCode;
+    }
+  }
+
+  void toggleLanguageCode(String value) {
+    languageCode = value;
+    _sharedPreferences.setString(_languageCodeKey, languageCode);
+  }
+
+  Locale get locale => Locale(languageCode);
 }

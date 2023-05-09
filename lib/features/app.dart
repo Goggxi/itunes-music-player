@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:itunes_music_player/core/configs/configs.dart';
 import 'package:itunes_music_player/features/injector.dart';
 import 'package:itunes_music_player/features/presentation/providers/config_provider.dart';
+import 'package:itunes_music_player/l10n/generated/l10n.dart';
 import 'package:provider/provider.dart';
 
 import 'presentation/providers/media_provider.dart';
@@ -15,7 +16,7 @@ class App extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => di<ConfigProvider>()..loadThemeMode(),
+          create: (_) => di<ConfigProvider>()..init(),
         ),
         ChangeNotifierProvider(create: (_) => di<MediaProvider>()),
         ChangeNotifierProvider(create: (_) => PalyerProvider()),
@@ -29,6 +30,9 @@ class App extends StatelessWidget {
             theme: AppThemes.light,
             darkTheme: AppThemes.dark,
             themeMode: config.themeMode,
+            locale: config.locale,
+            localizationsDelegates: S.localizationsDelegates,
+            supportedLocales: S.supportedLocales,
             onGenerateRoute: Navigate.onGenerateRoute,
             debugShowCheckedModeBanner: false,
           );

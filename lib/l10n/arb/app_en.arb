@@ -1,0 +1,17 @@
+{
+    "@@locale": "en",
+    "notFound": "{value} not found",
+    "@notFound" : {
+        "placeholder": {
+            "value": {
+                "type": "string",
+                "description": "The value to be used in the message"
+            }
+        }
+    },
+    "settings" : "Settings",
+    "darkMode" : "Dark Mode",
+    "language" : "Language",
+    "searchHint" : "Search for artist, songs, or albums",
+    "artistSongsAlbumsNotFound" : "No artists, songs, or albums found" 
+}

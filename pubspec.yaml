@@ -10,6 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   
   # C
   cupertino_icons: ^1.0.2
@@ -19,6 +21,7 @@ dependencies:
   # H
   http: ^0.13.6
   # I
+  intl: ^0.17.0
   injectable: ^2.1.1
   # J
   just_audio: ^0.9.32
@@ -41,6 +44,7 @@ dev_dependencies:
   injectable_generator: ^2.1.5
 
 flutter:
+  # generate: true # disable when generate build_runner
   uses-material-design: true
 
   

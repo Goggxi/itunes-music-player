@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:itunes_music_player/l10n/generated/l10n.dart';
 
 extension NavigatorExtension on BuildContext {
   void popPage<T extends Object?>([T? result]) => Navigator.pop(this, result);
@@ -30,6 +31,8 @@ extension ThemeExtension on BuildContext {
   double get height => mediaQuery.size.height;
 
   double get width => mediaQuery.size.width;
+
+  S get lang => S.of(this);
 }
 
 extension PaddingExtensions on Widget {

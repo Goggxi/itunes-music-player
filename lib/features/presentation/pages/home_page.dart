@@ -5,6 +5,7 @@ import 'package:itunes_music_player/features/data/models/models.dart';
 import 'package:itunes_music_player/features/presentation/providers/config_provider.dart';
 import 'package:itunes_music_player/features/presentation/providers/media_provider.dart';
 import 'package:itunes_music_player/features/presentation/providers/player_provider.dart';
+import 'package:itunes_music_player/l10n/generated/l10n.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/images.dart';
@@ -63,7 +64,7 @@ class _HeaderSection extends StatelessWidget {
             Expanded(
               child: TextField(
                 decoration: InputDecoration(
-                  hintText: 'Search for artist, songs, or albums',
+                  hintText: context.lang.searchHint,
                   prefixIcon: const Icon(Icons.search_outlined),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -101,7 +102,7 @@ class _ConfigModalBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<ConfigProvider>(
-      builder: (context, model, child) => SizedBox(
+      builder: (_, config, __) => SizedBox(
         height: 200,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,30 +110,34 @@ class _ConfigModalBottomSheet extends StatelessWidget {
             Padding(
               padding: AppThemes.paddingDefault,
               child: Text(
-                'Settings',
+                context.lang.settings,
                 style: context.textTheme.titleLarge,
               ),
             ),
             ListTile(
               leading: const Icon(Icons.color_lens),
-              title: const Text('Dark mode'),
+              title: Text(context.lang.darkMode),
               trailing: Switch(
-                value: model.isDarkMode,
+                value: config.isDarkMode,
                 onChanged: (value) {
-                  model.toggleThemeMode();
+                  config.toggleThemeMode();
                 },
               ),
             ),
             ListTile(
               leading: const Icon(Icons.language),
-              title: const Text('Language'),
+              title: Text(context.lang.language),
               trailing: DropdownButton<String>(
-                value: 'en',
-                onChanged: (String? value) {},
-                items: <String>['en', 'id'].map((String value) {
+                value: config.languageCode,
+                onChanged: (value) {
+                  if (value != null && value.isNotEmpty) {
+                    config.toggleLanguageCode(value);
+                  }
+                },
+                items: S.supportedLocales.map((value) {
                   return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
+                    value: value.languageCode,
+                    child: Text(value.languageCode),
                   );
                 }).toList(),
               ),
@@ -168,7 +173,7 @@ class _ListSection extends StatelessWidget {
                       color: context.theme.highlightColor,
                     ).paddingOnly(top: context.height * 0.2),
                     Text(
-                      'Artist, songs, or albums not found',
+                      context.lang.artistSongsAlbumsNotFound,
                       textAlign: TextAlign.center,
                       style: context.textTheme.bodySmall?.copyWith(
                         color: context.theme.highlightColor,

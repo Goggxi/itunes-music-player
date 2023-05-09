@@ -1,0 +1,17 @@
+{
+    "@@locale": "id",
+    "notFound": "{value} tidak ditemukan",
+    "@notFound" : {
+        "placeholder": {
+            "value": {
+                "type": "string",
+                "description": "The value to be used in the message"
+            }
+        }
+    },
+    "settings" : "Pengaturan",
+    "darkMode" : "Mode Gelap",
+    "language" : "Bahasa",
+    "searchHint" : "Cari lagu, artis, atau album",
+    "artistSongsAlbumsNotFound" : "Tidak ada lagu atau album ditemukan" 
+}
