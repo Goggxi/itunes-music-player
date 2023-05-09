@@ -15,9 +15,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => di<ConfigProvider>()..init(),
-        ),
+        ChangeNotifierProvider(create: (_) => di<ConfigProvider>()..init()),
         ChangeNotifierProvider(create: (_) => di<MediaProvider>()),
         ChangeNotifierProvider(create: (_) => PalyerProvider()),
       ],
