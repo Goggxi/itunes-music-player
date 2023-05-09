@@ -9,22 +9,26 @@ class PlayerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<PalyerProvider>(
-      builder: (_, playerProvider, __) {
-        final media = playerProvider.media;
-        return Scaffold(
-          appBar: AppBar(
-            leading: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CircleAvatar(
-                child: IconButton(
-                  onPressed: () => context.popPage(),
-                  icon: const Icon(Icons.arrow_back_outlined),
-                ),
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: CircleAvatar(
+            child: IconButton(
+              onPressed: () => context.popPage(),
+              icon: const Icon(Icons.arrow_back_outlined),
             ),
           ),
-          body: SingleChildScrollView(
+        ),
+      ),
+      body: Consumer<PalyerProvider>(
+        builder: (_, playerProvider, __) {
+          if (playerProvider.isSetPlayer) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final media = playerProvider.media;
+          return SingleChildScrollView(
             child: Column(
               children: [
                 Hero(
@@ -55,11 +59,15 @@ class PlayerPage extends StatelessWidget {
                       color: context.theme.colorScheme.onSurface,
                       borderRadius: BorderRadius.circular(100),
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          playerProvider.togglePlayback();
+                        },
                         child: Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: Icon(
-                            Icons.play_arrow_outlined,
+                            !playerProvider.isPlaying
+                                ? Icons.play_arrow_outlined
+                                : Icons.pause_outlined,
                             size: 50,
                             color: context.theme.colorScheme.surface,
                           ),
@@ -73,14 +81,32 @@ class PlayerPage extends StatelessWidget {
                   ],
                 ).paddingOnly(top: 20),
                 Slider(
-                  value: 0.5,
-                  onChanged: (value) {},
+                  value: playerProvider.position.inSeconds.toDouble(),
+                  max: playerProvider.duration.inSeconds.toDouble(),
+                  onChanged: (value) {
+                    playerProvider.player.seek(
+                      Duration(seconds: value.toInt()),
+                    );
+                  },
                 ).paddingOnly(top: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      playerProvider.positionToString(),
+                      style: context.textTheme.bodyMedium,
+                    ),
+                    Text(
+                      playerProvider.durationToString(),
+                      style: context.textTheme.bodyMedium,
+                    ),
+                  ],
+                ).paddingSymmetric(h: 24),
               ],
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

@@ -111,13 +111,17 @@ class _ListSection extends StatelessWidget {
                     final media = mediaProvider.mediaList[index];
                     return _MediaItem(
                       media: media,
-                      onTap: () {
+                      onTap: () async {
                         FocusManager.instance.primaryFocus?.unfocus();
                         final playerProvider = context.read<PalyerProvider>();
-                        if (playerProvider.media.trackId != media.trackId) {
-                          playerProvider.media = media;
-                        }
                         context.pushNamed(Navigate.player);
+                        if (playerProvider.media.trackId != media.trackId) {
+                          playerProvider.reset();
+                          playerProvider.media = media;
+                          await playerProvider.setPlayer(
+                            onError: (_) {},
+                          );
+                        }
                       },
                     );
                   },

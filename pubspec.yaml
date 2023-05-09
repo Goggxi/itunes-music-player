@@ -20,6 +20,8 @@ dependencies:
   http: ^0.13.6
   # I
   injectable: ^2.1.1
+  # J
+  just_audio: ^0.9.32
   # P
   provider: ^6.0.5
   # S
