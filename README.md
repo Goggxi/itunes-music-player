@@ -28,19 +28,19 @@ flutter packages pub run build_runner build --delete-conflicting-outputs
 <img src="resources/demo.gif" style="display: block; margin-left: auto; margin-right: auto; width: 30%;"/>
 
 ### Light mode
-<div style="display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 20px;">
-  <img src="resources/light1.jpg" alt="light1"/>
-  <img src="resources/light2.jpg" alt="light2"/>
-  <img src="resources/light3.jpg" alt="light3"/>
-  <img src="resources/light4.jpg" alt="light4"/>
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 20px;">
+  <img src="resources/light1.jpg" width="30%"/>
+  <img src="resources/light2.jpg" width="30%"/>
+  <img src="resources/light3.jpg" width="30%"/>
+  <img src="resources/light4.jpg" width="30%"/>
 </div>
 
 ### Dark mode
-<div style="display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 20px;">
-  <img src="resources/dark1.jpg"  alt="dark1"/>
-  <img src="resources/dark2.jpg"  alt="dark2"/>
-  <img src="resources/dark3.jpg"  alt="dark3"/>
-  <img src="resources/dark4.jpg"  alt="dark4"/>
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 20px;">
+  <img src="resources/dark1.jpg" width="30%"/>
+  <img src="resources/dark2.jpg" width="30%"/>
+  <img src="resources/dark3.jpg" width="30%"/>
+  <img src="resources/dark4.jpg" width="30%"/>
 </div>
 
 
