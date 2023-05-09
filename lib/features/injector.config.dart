@@ -14,14 +14,16 @@ import 'package:http/http.dart' as _i3;
 import 'package:injectable/injectable.dart' as _i2;
 import 'package:itunes_music_player/core/utils/api.dart' as _i5;
 import 'package:itunes_music_player/features/data/repositories/itunes_repository.dart'
-    as _i7;
-import 'package:itunes_music_player/features/data/repositories/itunes_repository_contract.dart'
-    as _i6;
-import 'package:itunes_music_player/features/data/repositories/repositories.dart'
-    as _i9;
-import 'package:itunes_music_player/features/modules.dart' as _i10;
-import 'package:itunes_music_player/features/presentation/providers/media_provider.dart'
     as _i8;
+import 'package:itunes_music_player/features/data/repositories/itunes_repository_contract.dart'
+    as _i7;
+import 'package:itunes_music_player/features/data/repositories/repositories.dart'
+    as _i10;
+import 'package:itunes_music_player/features/modules.dart' as _i11;
+import 'package:itunes_music_player/features/presentation/providers/config_provider.dart'
+    as _i6;
+import 'package:itunes_music_player/features/presentation/providers/media_provider.dart'
+    as _i9;
 import 'package:shared_preferences/shared_preferences.dart' as _i4;
 
 extension GetItInjectableX on _i1.GetIt {
@@ -42,12 +44,14 @@ extension GetItInjectableX on _i1.GetIt {
       preResolve: true,
     );
     gh.factory<_i5.Api>(() => _i5.Api(gh<_i3.Client>()));
-    gh.lazySingleton<_i6.ItunesRepositoryContract>(
-        () => _i7.ItunesRepository(gh<_i5.Api>()));
-    gh.factory<_i8.MediaProvider>(
-        () => _i8.MediaProvider(gh<_i9.ItunesRepositoryContract>()));
+    gh.factory<_i6.ConfigProvider>(
+        () => _i6.ConfigProvider(gh<_i4.SharedPreferences>()));
+    gh.lazySingleton<_i7.ItunesRepositoryContract>(
+        () => _i8.ItunesRepository(gh<_i5.Api>()));
+    gh.factory<_i9.MediaProvider>(
+        () => _i9.MediaProvider(gh<_i10.ItunesRepositoryContract>()));
     return this;
   }
 }
 
-class _$RegisterModule extends _i10.RegisterModule {}
+class _$RegisterModule extends _i11.RegisterModule {}

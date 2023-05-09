@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:itunes_music_player/core/configs/configs.dart';
 import 'package:itunes_music_player/core/utils/utils.dart';
 import 'package:itunes_music_player/features/data/models/models.dart';
+import 'package:itunes_music_player/features/presentation/providers/config_provider.dart';
 import 'package:itunes_music_player/features/presentation/providers/media_provider.dart';
 import 'package:itunes_music_player/features/presentation/providers/player_provider.dart';
 import 'package:provider/provider.dart';
@@ -43,6 +44,15 @@ class _HeaderSection extends StatelessWidget {
     );
   }
 
+  Future<void> _showConfig(BuildContext context) async {
+    return showModalBottomSheet<void>(
+      context: context,
+      builder: (context) {
+        return _ConfigModalBottomSheet();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -70,7 +80,7 @@ class _HeaderSection extends StatelessWidget {
             ),
             const SizedBox(width: 10),
             InkWell(
-              onTap: () {},
+              onTap: () => _showConfig(context),
               child: Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -78,6 +88,53 @@ class _HeaderSection extends StatelessWidget {
                   border: Border.all(color: context.theme.disabledColor),
                 ),
                 child: const Icon(Icons.settings_outlined),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ConfigModalBottomSheet extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ConfigProvider>(
+      builder: (context, model, child) => SizedBox(
+        height: 200,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: AppThemes.paddingDefault,
+              child: Text(
+                'Settings',
+                style: context.textTheme.titleLarge,
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.color_lens),
+              title: const Text('Dark mode'),
+              trailing: Switch(
+                value: model.isDarkMode,
+                onChanged: (value) {
+                  model.toggleThemeMode();
+                },
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.language),
+              title: const Text('Language'),
+              trailing: DropdownButton<String>(
+                value: 'en',
+                onChanged: (String? value) {},
+                items: <String>['en', 'id'].map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
               ),
             ),
           ],
@@ -103,7 +160,22 @@ class _ListSection extends StatelessWidget {
             separatorBuilder: (_, __) => const SizedBox(height: 16),
           ),
           child: mediaProvider.mediaList.isEmpty
-              ? const Center(child: Text('No results found'))
+              ? ListView(
+                  children: [
+                    Icon(
+                      Icons.search_off_outlined,
+                      size: 60,
+                      color: context.theme.highlightColor,
+                    ).paddingOnly(top: context.height * 0.2),
+                    Text(
+                      'Artist, songs, or albums not found',
+                      textAlign: TextAlign.center,
+                      style: context.textTheme.bodySmall?.copyWith(
+                        color: context.theme.highlightColor,
+                      ),
+                    ),
+                  ],
+                )
               : ListView.separated(
                   padding: const EdgeInsets.all(16),
                   itemCount: mediaProvider.mediaList.length,
@@ -165,7 +237,7 @@ class _MediaItem extends StatelessWidget {
                 Text(
                   media.trackName,
                   maxLines: 2,
-                  style: context.textTheme.titleLarge?.copyWith(
+                  style: context.textTheme.bodyLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -192,11 +264,15 @@ class _MediaItem extends StatelessWidget {
                 color: context.theme.colorScheme.onSurface,
                 borderRadius: BorderRadius.circular(100),
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    playerProvider.togglePlayback();
+                  },
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Icon(
-                      Icons.play_arrow_outlined,
+                      !playerProvider.isPlaying
+                          ? Icons.play_arrow_outlined
+                          : Icons.pause_outlined,
                       size: 30,
                       color: context.theme.colorScheme.surface,
                     ),

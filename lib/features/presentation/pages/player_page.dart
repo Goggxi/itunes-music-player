@@ -37,7 +37,7 @@ class PlayerPage extends StatelessWidget {
                     url: media.artworkUrl100,
                     width: context.width * 0.8,
                   ),
-                ),
+                ).paddingOnly(top: 20),
                 Text(
                   media.trackName,
                   textAlign: TextAlign.center,
@@ -52,8 +52,8 @@ class PlayerPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.skip_previous_outlined, size: 30),
+                      onPressed: () => playerProvider.rewind(),
+                      icon: const Icon(Icons.replay_10_outlined, size: 30),
                     ),
                     Material(
                       color: context.theme.colorScheme.onSurface,
@@ -75,19 +75,15 @@ class PlayerPage extends StatelessWidget {
                       ),
                     ).paddingOnly(left: 8, right: 8),
                     IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.skip_next_outlined, size: 30),
+                      onPressed: () => playerProvider.fordward(),
+                      icon: const Icon(Icons.forward_10_outlined, size: 30),
                     ),
                   ],
                 ).paddingOnly(top: 20),
                 Slider(
                   value: playerProvider.position.inSeconds.toDouble(),
                   max: playerProvider.duration.inSeconds.toDouble(),
-                  onChanged: (value) {
-                    playerProvider.player.seek(
-                      Duration(seconds: value.toInt()),
-                    );
-                  },
+                  onChanged: (value) => playerProvider.seek(value.toInt()),
                 ).paddingOnly(top: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

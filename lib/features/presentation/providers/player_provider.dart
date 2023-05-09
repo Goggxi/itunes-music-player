@@ -95,6 +95,30 @@ class PalyerProvider with ChangeNotifier {
     return '$minutes:$seconds';
   }
 
+  void seek(int seconds) {
+    player.seek(Duration(seconds: seconds));
+  }
+
+  void fordward() {
+    if (position + const Duration(seconds: 10) >= duration) {
+      player.seek(duration);
+      player.stop();
+      isPlaying = false;
+      return;
+    }
+
+    player.seek(position + const Duration(seconds: 10));
+  }
+
+  void rewind() {
+    if (position - const Duration(seconds: 10) <= Duration.zero) {
+      player.seek(Duration.zero);
+      return;
+    }
+
+    player.seek(position - const Duration(seconds: 10));
+  }
+
   void reset() {
     isPlaying = false;
     duration = Duration.zero;
