@@ -29,18 +29,18 @@ flutter packages pub run build_runner build --delete-conflicting-outputs
 
 ### Light mode
 <div style="display: grid; grid-template-columns: repeat(4, 1fr); grid-gap: 20px;">
-  <img src="resources/light1.jpg" width="30%"/>
-  <img src="resources/light2.jpg" width="30%"/>
-  <img src="resources/light3.jpg" width="30%"/>
-  <img src="resources/light4.jpg" width="30%"/>
+  <img src="resources/light1.jpg" width="20%"/>
+  <img src="resources/light2.jpg" width="20%"/>
+  <img src="resources/light3.jpg" width="20%"/>
+  <img src="resources/light4.jpg" width="20%"/>
 </div>
 
 ### Dark mode
 <div style="display: grid; grid-template-columns: repeat(4, 1fr); grid-gap: 20px;">
-  <img src="resources/dark1.jpg" width="30%"/>
-  <img src="resources/dark2.jpg" width="30%"/>
-  <img src="resources/dark3.jpg" width="30%"/>
-  <img src="resources/dark4.jpg" width="30%"/>
+  <img src="resources/dark1.jpg" width="20%"/>
+  <img src="resources/dark2.jpg" width="20%"/>
+  <img src="resources/dark3.jpg" width="20%"/>
+  <img src="resources/dark4.jpg" width="20%"/>
 </div>
 
 
