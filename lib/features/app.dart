@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:itunes_music_player/core/configs/configs.dart';
 import 'package:itunes_music_player/features/injector.dart';
+import 'package:itunes_music_player/features/presentation/providers/player_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'presentation/providers/media_provider.dart';
@@ -13,13 +14,14 @@ class App extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => di<MediaProvider>()),
+        ChangeNotifierProvider(create: (_) => PalyerProvider()),
       ],
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: MaterialApp(
           title: 'ITunes Music',
-          theme: ThemeData(primarySwatch: Colors.blue),
+          theme: ThemeData.light(useMaterial3: true),
           onGenerateRoute: Navigate.onGenerateRoute,
           debugShowCheckedModeBanner: false,
         ),

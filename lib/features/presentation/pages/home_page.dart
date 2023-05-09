@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:itunes_music_player/core/configs/navigate.dart';
+import 'package:itunes_music_player/core/configs/configs.dart';
 import 'package:itunes_music_player/core/utils/utils.dart';
 import 'package:itunes_music_player/features/data/models/models.dart';
 import 'package:itunes_music_player/features/presentation/providers/media_provider.dart';
+import 'package:itunes_music_player/features/presentation/providers/player_provider.dart';
 import 'package:provider/provider.dart';
+
+import '../widgets/images.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -51,7 +54,7 @@ class _HeaderSection extends StatelessWidget {
               child: TextField(
                 decoration: InputDecoration(
                   hintText: 'Search for artist, songs, or albums',
-                  prefixIcon: const Icon(Icons.search),
+                  prefixIcon: const Icon(Icons.search_outlined),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
@@ -72,9 +75,9 @@ class _HeaderSection extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.grey[400]!),
+                  border: Border.all(color: context.theme.disabledColor),
                 ),
-                child: const Icon(Icons.settings_rounded),
+                child: const Icon(Icons.settings_outlined),
               ),
             ),
           ],
@@ -93,21 +96,33 @@ class _ListSection extends StatelessWidget {
       return Expanded(
         child: Visibility(
           visible: !mediaProvider.isSearching,
-          replacement: const Center(child: CircularProgressIndicator()),
-          child: ListView.separated(
+          replacement: ListView.separated(
             padding: const EdgeInsets.all(16),
-            itemCount: mediaProvider.mediaList.length,
-            itemBuilder: (_, index) {
-              final media = mediaProvider.mediaList[index];
-              return _MediaItem(
-                media: media,
-                onTap: () => context.pushNamed(Navigate.player),
-              );
-            },
-            separatorBuilder: (context, index) => const SizedBox(
-              height: 16,
-            ),
+            itemCount: 6,
+            itemBuilder: (_, __) => const _MediaItemSkeleton(),
+            separatorBuilder: (_, __) => const SizedBox(height: 16),
           ),
+          child: mediaProvider.mediaList.isEmpty
+              ? const Center(child: Text('No results found'))
+              : ListView.separated(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: mediaProvider.mediaList.length,
+                  itemBuilder: (_, index) {
+                    final media = mediaProvider.mediaList[index];
+                    return _MediaItem(
+                      media: media,
+                      onTap: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        final playerProvider = context.read<PalyerProvider>();
+                        if (playerProvider.media.trackId != media.trackId) {
+                          playerProvider.media = media;
+                        }
+                        context.pushNamed(Navigate.player);
+                      },
+                    );
+                  },
+                  separatorBuilder: (_, __) => const SizedBox(height: 16),
+                ),
         ),
       );
     });
@@ -130,42 +145,12 @@ class _MediaItem extends StatelessWidget {
       onTap: onTap,
       child: Row(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Image.network(
-              media.artworkUrl100,
+          Hero(
+            tag: media.trackId,
+            child: ImageApp(
+              url: media.artworkUrl100,
               width: 100,
               height: 100,
-              loadingBuilder: (_, child, progress) {
-                if (progress == null) return child;
-                return Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Center(
-                    child: Icon(Icons.image, color: Colors.grey[400]),
-                  ),
-                );
-              },
-              errorBuilder: (_, __, ___) {
-                return Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Center(
-                    child: Icon(
-                      Icons.broken_image_rounded,
-                      color: Colors.grey[400],
-                    ),
-                  ),
-                );
-              },
             ),
           ),
           const SizedBox(width: 12),
@@ -175,7 +160,10 @@ class _MediaItem extends StatelessWidget {
               children: [
                 Text(
                   media.trackName,
-                  style: context.textTheme.titleLarge,
+                  maxLines: 2,
+                  style: context.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Row(
@@ -186,7 +174,7 @@ class _MediaItem extends StatelessWidget {
                         media.artistName,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: context.textTheme.bodyLarge,
+                        style: context.textTheme.bodyMedium,
                       ),
                     ),
                   ],
@@ -194,8 +182,75 @@ class _MediaItem extends StatelessWidget {
               ],
             ),
           ),
+          Consumer<PalyerProvider>(builder: (_, playerProvider, __) {
+            if (media.trackId == playerProvider.media.trackId) {
+              return Material(
+                color: context.theme.colorScheme.onSurface,
+                borderRadius: BorderRadius.circular(100),
+                child: InkWell(
+                  onTap: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Icon(
+                      Icons.play_arrow_outlined,
+                      size: 30,
+                      color: context.theme.colorScheme.surface,
+                    ),
+                  ),
+                ),
+              ).paddingOnly(left: 8);
+            }
+            return const SizedBox();
+          }),
         ],
       ),
+    );
+  }
+}
+
+class _MediaItemSkeleton extends StatelessWidget {
+  const _MediaItemSkeleton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: 100,
+          height: 100,
+          decoration: BoxDecoration(
+            color: context.theme.highlightColor,
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: context.width * 0.6,
+                height: 20,
+                decoration: BoxDecoration(
+                  color: context.theme.highlightColor,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+              const SizedBox(height: 4),
+              Container(
+                width: context.width * 0.4,
+                height: 15,
+                decoration: BoxDecoration(
+                  color: context.theme.highlightColor,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
